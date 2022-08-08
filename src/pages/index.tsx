@@ -65,9 +65,17 @@ const Slideover: FC<SlideOverProps> = ({ open, setOpen, setModal }) => {
                       <button
                         type='button'
                         onClick={() => {
-                          setOpen(false)
-                          setModal(true)
-                        }}>
+                        setOpen(false)
+                        setTimeout(() => {
+                          // A "nextFrame" implementation. Double rAF to ensure all transitions
+                          // are complete.
+                          requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                              setModal(true)
+                            })
+                          })
+                        }, 700 /* Duration of Transition (sm:duration-700) */)}}
+                      >
                         open modal
                       </button>
                     </div>
