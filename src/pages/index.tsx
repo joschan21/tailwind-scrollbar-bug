@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Dispatch, FC, Fragment, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, FC, Fragment, ReactNode, SetStateAction, useRef, useState } from 'react'
 
 type ModalProps = {
   open: boolean
@@ -11,9 +11,10 @@ type SlideOverProps = {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   setModal: Dispatch<SetStateAction<boolean>>
+  children: ReactNode
 }
 
-const Slideover: FC<SlideOverProps> = ({ open, setOpen, setModal }) => {
+const Slideover: FC<SlideOverProps> = ({ children, open, setOpen, setModal }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={setOpen}>
@@ -65,7 +66,6 @@ const Slideover: FC<SlideOverProps> = ({ open, setOpen, setModal }) => {
                       <button
                         type='button'
                         onClick={() => {
-                          setOpen(false)
                           setModal(true)
                         }}>
                         open modal
@@ -77,6 +77,7 @@ const Slideover: FC<SlideOverProps> = ({ open, setOpen, setModal }) => {
             </div>
           </div>
         </div>
+        {children}
       </Dialog>
     </Transition.Root>
   )
@@ -163,8 +164,9 @@ const Home: NextPage = () => {
         open slideover
       </button>
 
-      <Slideover open={slideover} setOpen={setSlideover} setModal={setModal} />
-      <Modal open={modal} setOpen={setModal} />
+      <Slideover open={slideover} setOpen={setSlideover} setModal={setModal}>
+        <Modal open={modal} setOpen={setModal} />
+      </Slideover>
 
       <p className='max-w-prose mx-auto'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa voluptatum animi culpa rerum, nihil odio
